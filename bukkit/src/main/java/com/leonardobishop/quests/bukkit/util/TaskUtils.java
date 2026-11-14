@@ -195,10 +195,10 @@ public class TaskUtils {
 	public static void sendTrackAdvancement(Player player, Quest quest, Task task, PendingTask pendingTask, Number amount) {
         TaskProgress taskProgress = pendingTask.taskProgress();
 
-        boolean useActionBar = plugin.getConfig().getBoolean("options.actionbar.progress", false)
-                || (taskProgress.isCompleted() && plugin.getConfig().getBoolean("options.actionbar.complete", false));
-        boolean useBossBar = plugin.getConfig().getBoolean("options.bossbar.progress", false)
-                || (taskProgress.isCompleted() && plugin.getConfig().getBoolean("options.bossbar.complete", false));
+        boolean useActionBar = plugin.getQuestsConfig().getBoolean("options.actionbar.progress", false)
+                || (taskProgress.isCompleted() && plugin.getQuestsConfig().getBoolean("options.actionbar.complete", false));
+        boolean useBossBar = plugin.getQuestsConfig().getBoolean("options.bossbar.progress", false)
+                || (taskProgress.isCompleted() && plugin.getQuestsConfig().getBoolean("options.bossbar.complete", false));
         if (!useActionBar && !useBossBar) {
             return;
         }
@@ -345,7 +345,8 @@ public class TaskUtils {
     }
 
     public static boolean matchBlock(@NotNull BukkitTaskType type, @NotNull PendingTask pendingTask, @Nullable Block block, @NotNull UUID player, @NotNull String stringKey, @NotNull String listKey) {
-        return matchBlock(type, pendingTask, block != null ? block.getState() : null, player, stringKey, listKey);
+        return matchBlock(type, pendingTask, block != null ? block.getType() : null,
+                () -> block.getState().getRawData(), player, stringKey, listKey);
     }
 
     public static boolean matchBlock(@NotNull BukkitTaskType type, @NotNull PendingTask pendingTask, @Nullable BlockData data, @NotNull UUID player) {
